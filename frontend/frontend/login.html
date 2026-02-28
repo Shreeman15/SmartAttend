@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — HRFlow</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-card">
+  <div class="auth-logo">
+    <div class="logo-icon">🏢</div>
+    <div>
+      <h1>HRFlow</h1>
+      <span>Management System</span>
+    </div>
+  </div>
+
+  <h2 class="auth-title">Sign In</h2>
+  <p class="auth-sub">You'll be redirected to your portal automatically.</p>
+
+  <div id="alert-box"></div>
+
+  <form id="login-form">
+    <div class="form-group" style="margin-bottom:16px">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="admin@company.com" required autocomplete="email"/>
+    </div>
+    <div class="form-group" style="margin-bottom:24px">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Hr@1234" required/>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg w-full" id="login-btn" style="justify-content:center">
+      Sign In →
+    </button>
+  </form>
+
+  <p style="margin-top:20px;text-align:center;font-size:0.85rem;color:var(--white-dim)">
+    New employee? <a href="register.html" class="auth-link">Create account</a>
+  </p>
+
+  <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div style="padding:12px;background:rgba(255,152,0,0.07);border:1px solid rgba(255,152,0,0.25);border-radius:8px">
+      <p style="font-size:0.7rem;color:#ff9800;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🔐 Admin Login</p>
+      <p style="font-size:0.8rem;color:var(--white-dim)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f190959c989fb1929e9c81909f88df929e9c">[email&#160;protected]</a></p>
+      <p style="font-size:0.8rem;color:var(--white-dim)">Hr@1234</p>
+    </div>
+    <div style="padding:12px;background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:8px">
+      <p style="font-size:0.7rem;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">👤 Employee Login</p>
+      <p style="font-size:0.8rem;color:var(--white-dim)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3657445c43587655595b4657584f1855595b">[email&#160;protected]</a></p>
+      <p style="font-size:0.8rem;color:var(--white-dim)">Hr@1234</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/api.js"></script>
+<script>
+  // Already logged in
+  const _t = getToken(), _u = getUser();
+  if (_t && _u) redirectByRole(_u);
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn      = document.getElementById('login-btn');
+    const alertBox = document.getElementById('alert-box');
+    alertBox.innerHTML = '';
+    btn.disabled    = true;
+    btn.textContent = 'Signing in...';
+
+    try {
+      const data = await api.post('/auth/login', {
+        email:    document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value
+      });
+      setAuth(data.token, data.empl

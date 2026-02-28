@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Attendance Reports — Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-layout" id="app-layout">
+  <div class="main-content">
+    <div class="topbar">
+      <button class="hamburger" id="hamburger">☰</button>
+      <div class="topbar-title">📈 Attendance Reports</div>
+      <div class="topbar-actions">
+        <span style="background:rgba(255,152,0,0.15);color:#ff9800;padding:4px 12px;border-radius:999px;font-size:0.75rem;font-weight:700">🔐 ADMIN</span>
+      </div>
+    </div>
+    <div class="page-body">
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('dept')">🏢 Dept Summary</button>
+        <button class="tab-btn"        onclick="switchTab('leave')">🌿 Leave Utilization</button>
+      </div>
+
+      <!-- DEPT SUMMARY -->
+      <div class="tab-content active" id="tab-dept">
+        <div class="card">
+          <div class="section-header">
+            <div class="card-title" style="margin-bottom:0"><span class="icon">🏢</span> Department-wise Attendance</div>
+            <div style="display:flex;gap:8px">
+              <select id="att-month" style="width:120px"></select>
+              <select id="att-year"  style="width:90px"></select>
+              <button class="btn btn-primary btn-sm" onclick="loadAttReport()">Load</button>
+            </div>
+          </div>
+          <div class="grid-2" style="margin-top:16px">
+            <canvas id="deptChart" height="260"></canvas>
+            <div id="dept-table"><div class="loader"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEAVE UTILIZATION -->
+      <div class="tab-content" id="tab-leave">
+        <div class="card">
+          <div class="section-header">
+            <div class="card-title" style="margin-bottom:0"><span class="icon">🌿</span> Leave Utilization</div>
+            <div style="display:flex;gap:8px">
+              <select id="leave-year" style="width:90px"></select>
+              <button class="btn btn-primary btn-sm" onclick="loadLeaveReport()">Load</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Employee</th><th>Dept</th><th>Sick (10)</th><th>Casual (12)</th><th>Earned (15)</th><th>Unpaid</th><th>Total</th></tr></thead>
+              <tbody id="leave-tbody"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--white-dim)">Select year and click Load</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../js/api.js"></script>
+<script src="../js/admin-sidebar.js"></script>
+<script>
+let deptChart = null;
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+document.addEventListener('DOMContentLoaded', () => {
+  requireAdmin();
+  const now=new Date(), cy=now.getFullYear(), cm=now.getMonth()+1;
+  ['att-month'].forEach(id=>{const el=document.getElementById(id);MONTHS.forEach((m,i)=>el.innerHTML+=`<option value="${i+1}" ${(i+1)===cm?'selected':''}>${m}</option>`);});
+  ['att-year','leave-year'].forEach(id=>{const el=document.getElementById(id);for(let y=cy;y>=cy-3;y--) el.innerHTML+=`<option value="${y}" ${y===cy?'selected':''}>${y}</option>`;});
+});
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['dept','leave'][i]===name));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+async function loadAttReport() {
+  const month=document.getElementById('att-month').value, year=document.getElementById('att-year').value;
+  const container=document.getElementById('dept-table');
+  container.innerHTML='<div class="loader"></div>';
+  try {
+    const res=await api.get(`/reports/attendance?month=${month}&year=${year}`);
+    const depts=Object.entries(res.data);
+    if (!depts.length){container.innerHTML='<p style="text-align:center;padding:40px;color:var(--white-dim)">No data</p>';return;}
+    if (deptChart) deptChart.destroy();
+    deptChart=new Chart(document.getElementById('deptChart'),{
+      type:'bar',
+      data:{labels:depts.map(([d])=>d),datasets:[
+        {label:'Present',data:depts.map(([,v])=>v.present),backgroundColor:'rgba(0,230,118,0.7)'},
+        {label:'Absent', data:depts.map(([,v])=>v.absent), backgroundColor:'rgba(255,82,82,0.7)'},
+        {label:'Half-day',data:depts.map(([,v])=>v.half_day),backgroundColor:'rgba(255,171,64,0.7)'}
+      ]},
+      options:{plugins:{legend:{labels:{color:'#8899aa'}}},scales:{x:{ticks:{color:'#8899aa'},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#8899aa'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}}}
+    });
+    container.innerHTML=`<div class="table-wrapper"><table>
+      <thead><tr><th>Dept</th><th>Present</th><th>Absent</th><th>Half-day</th><th>On Leave</th></tr></thead>
+      <tbody>${depts.map(([d,v])=>`<tr><td><strong>${d}</strong></td><td class="text-green">${v.present}</td><td class="text-red">${v.absent}</td><td class="text-amber">${v.half_day}</td><td style="color:var(--purple)">${v.on_leave}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch(err){container.innerHTML=`<div class="alert alert-error">⚠ ${err.message}</div>`;}
+}
+
+async function loadLeaveReport() {
+  const year=document.getElementById('leave-year').value;
+  const tbody=document.getElementById('leave-tbody');
+  tbody.innerHTML='<tr class="loading-row"><td colspan="7"><div class="loader"></div></td></tr>';
+  try {
+    const res=await api.get('/reports/leaves?year='+year);
+    if (!res.data.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--white-dim)">No data</td></tr>';return;}
+    tbody.innerHTML=res.data.map(e=>`<tr>
+      <td><strong>${e.name}</strong></td><td>${e.department}</td>
+      <td class="${e.Sick>=10?'text-red':''}">${e.Sick}/10</td>
+      <td class="${e.Casual>=12?'text-red':''}">${e.Casual}/12</td>
+      <td class="${e.Earned>=15?'text-red':''}">${e.Earned}/15</td>
+      <td class="text-amber">${e.Unpaid}</td>
+      <td><strong>${e.total}</strong></td>
+    </tr>`).join('');
+  } catch(err){tbody.innerHTML=`<tr><td colspan="7"><div class="alert alert-error">⚠ ${err.message}</div></td></tr>`;}
+}
+</script>
+</body>
+</html>

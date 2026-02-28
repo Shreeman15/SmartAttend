@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Employees — Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+<div class="app-layout" id="app-layout">
+  <div class="main-content">
+    <div class="topbar">
+      <button class="hamburger" id="hamburger">☰</button>
+      <div class="topbar-title">👥 Manage Employees</div>
+      <div class="topbar-actions">
+        <span style="background:rgba(255,152,0,0.15);color:#ff9800;padding:4px 12px;border-radius:999px;font-size:0.75rem;font-weight:700">🔐 ADMIN</span>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="card">
+        <div class="section-header">
+          <div class="card-title" style="margin-bottom:0"><span class="icon">👥</span> All Employees</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="text" id="search" placeholder="Search name / email..." style="width:180px" oninput="filterTable()"/>
+            <select id="dept-filter" style="width:130px" onchange="filterTable()">
+              <option value="">All Depts</option>
+              <option>Engineering</option><option>HR</option><option>Finance</option>
+              <option>Marketing</option><option>Operations</option><option>Sales</option>
+            </select>
+            <a href="add-employee.html" class="btn btn-primary btn-sm">➕ Add Employee</a>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Dept</th><th>Designation</th><th>DOJ</th><th>Salary</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="emp-tbody"><tr class="loading-row"><td colspan="9"><div class="loader"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Edit Modal -->
+      <div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;display:none;align-items:center;justify-content:center">
+        <div class="card" style="width:100%;max-width:560px;max-height:90vh;overflow-y:auto">
+          <div class="section-header">
+            <div class="card-title" style="margin-bottom:0">✏️ Edit Employee</div>
+            <button class="btn btn-secondary btn-sm" onclick="closeModal()">✕</button>
+          </div>
+          <div id="edit-alert"></div>
+          <div class="form-grid">
+            <input type="hidden" id="edit-id"/>
+            <div class="form-group"><label>Full Name</label><input type="text" id="edit-name"/></div>
+            <div class="form-group"><label>Department</label>
+              <select id="edit-dept">
+                <option>Engineering</option><option>HR</option><option>Finance</option>
+                <option>Marketing</option><option>Operations</option><option>Sales</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Designation</label><input type="text" id="edit-desig"/></div>
+            <div class="form-group"><label>Base Salary (₹)</label><input type="number" id="edit-salary"/></div>
+            <div class="form-group"><label>Role</label>
+              <select id="edit-role">
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Status</label>
+              <select id="edit-active">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px">
+            <button class="btn btn-primary" onclick="saveEdit()">💾 Save Changes</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="../js/api.js"></script>
+<script src="../js/admin-sidebar.js"></script>
+<script>
+let allEmployees = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  requireAdmin(); loadEmployees();
+});
+
+async function loadEmployees() {
+  try {
+    const res = await api.get('/employees');
+    allEmployees = res.data || [];
+    renderTable(allEmployees);
+  } catch(err) {
+    document.getElementById('emp-tbody').innerHTML=`<tr><td colspan="9"><div class="alert alert-error">⚠ ${err.message}</div></td></tr>`;
+  }
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('emp-tbody');
+  if (!data.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--white-dim)">No employees found</td></tr>'; return; }
+  tbody.innerHTML = data.map(e=>`<tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--cyan-dim),#6464ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0">
+          ${e.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
+        </div>
+        <strong>${e.name}</strong>
+      </div>
+    </td>
+    <td style="font-size:0.82rem;color:var(--white-dim)">${e.email}</td>
+    <td>${e.department}</td>
+    <td style="font-size:0.82rem">${e.designation}</td>
+    <td style="font-size:0.8rem">${fmtDate(e.joining_date)}</td>
+    <td>${fmtCurrency(e.base_salary)}</td>
+    <td><span class="badge" style="background:rgba(0,212,255,0.1);color:var(--cyan);text-transform:capitalize">${e.role}</span></td>
+    <td><span class="badge ${e.is_active?'badge-approved':'badge-rejected'}">${e.is_active?'Active':'Inactive'}</span></td>
+    <td style="display:flex;gap:4px">
+      <button class="btn btn-secondary btn-sm" onclick="openEdit(${JSON.stringify(e).replace(/"/g,'&quot;')})">✏️ Edit</button>
+      <button class="btn btn-danger btn-sm"    onclick="toggleActive('${e._id}',${e.is_active})">${e.is_active?'Deactivate':'Activate'}</button>
+    </td>
+  </tr>`).join('');
+}
+
+function filterTable() {
+  const s = document.getElementById('search').value.toLowerCase();
+  const d = document.getElementById('dept-filter').value;
+  renderTable(allEmployees.filter(e=>
+    (!s || e.name.toLowerCase().includes(s) || e.email.toLowerCase().includes(s)) &&
+    (!d || e.department===d)
+  ));
+}
+
+function openEdit(emp) {
+  document.getElementById('edit-id').value     = emp._id;
+  document.getElementById('edit-name').value   = emp.name;
+  document.getElementById('edit-dept').value   = emp.department;
+  document.getElementById('edit-desig').value  = emp.designation;
+  document.getElementById('edit-salary').value = emp.base_salary;
+  document.getElementById('edit-role').value   = emp.role;
+  document.getElementById('edit-active').value = String(emp.is_active);
+  document.getElementById('edit-alert').innerHTML = '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+function closeModal() { document.getElementById('edit-modal').style.display = 'none'; }
+
+async function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  const alertBox = document.getElementById('edit-alert');
+  alertBox.innerHTML = '';
+  try {
+    await api.put('/employees/'+id, {
+      name:        document.getElementById('edit-name').value,
+      department:  document.getElementById('edit-dept').value,
+      designation: document.getElementById('edit-desig').value,
+      base_salary: parseFloat(document.getElementById('edit-salary').value),
+      role:        document.getElementById('edit-role').value,
+      is_active:   document.getElementById('edit-active').value === 'true'
+    });
+    showToast('Employee updated!','success');
+    closeModal(); loadEmployees();
+  } catch(err) {
+    alertBox.innerHTML = `<div class="alert alert-error">⚠ ${err.message}</div>`;
+  }
+}
+
+async function toggleActive(id, current) {
+  if (!confirm(`${current?'Deactivate':'Activate'} this employee?`)) return;
+  try {
+    await api.put('/employees/'+id, { is_active: !current });
+    showToast(`Employee ${current?'deactivated':'activated'}!`, current?'info':'success');
+    loadEmployees();
+  } catch(err) { showToast(err.message,'error'); }
+}
+</script>
+</body>
+</html>
