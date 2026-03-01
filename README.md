@@ -74,7 +74,82 @@ Shreeman – Conducted backend API testing and validation using Thunder Client.
 
 Rashmi – Developed backend modules, especially authentication and routing logic.
 
-Overall, Day 2 progress is aligned with our planned milestones. Core backend routing and frontend UI foundation are successfully established, and initial testing confirms functional stability.    
+Overall, Day 2 progress is aligned with our planned milestones. Core backend routing and frontend UI foundation are successfully established, and initial testing confirms functional stability. 
+
+
+
+Day:3
+=====
+Today’s session focused on frontend–backend integration and strengthening the core application flow.
+
+🔹 Backend Progress
+
+Implemented API structure and routing
+
+Completed User Authentication
+
+Register API
+
+Login API
+
+Developed Employee Dashboard APIs
+
+Database integration completed for:
+
+User registration data
+
+Login authentication
+
+Employee dashboard records
+
+🔹 Frontend Progress
+
+Connected frontend with backend APIs
+
+Implemented key UI pages:
+
+Login Page
+
+Register Page
+
+Dashboard UI
+
+Punch In functionality
+
+Punch Out functionality
+
+Initial setup of Admin Panel structure
+
+🔹 Integration Highlights
+
+Successful API consumption in frontend
+
+Verified end-to-end authentication flow
+
+Backend APIs now structured and ready for scaling
+
+🔹Team contributions
+  Biswa:-Frontend progress
+  Shreeman and Rashmi :- Backend progress
+  Bini:-Architecture and Api testing
+  
+
+Day:4
+=====
+
+Today we completed the following tasks in both Frontend and Backend:
+🔹 Implemented Salary Calculation Module
+   Backend logic for salary computation
+   Frontend integration and display
+
+🔹 Developed Leave History Feature
+   Leave records fetching from database
+   UI display of employee leave history
+
+🔹 Implemented Admin – Employee Fetch Functionality
+   Backend API to fetch employee details
+   Connected frontend to display employee data for admin
+   All modules were successfully integrated and tested from frontend to backend.
 
 
 
