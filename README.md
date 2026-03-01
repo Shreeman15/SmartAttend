@@ -128,7 +128,8 @@ Verified end-to-end authentication flow
 
 Backend APIs now structured and ready for scaling
 
-🔹Team contributions
+🔹Team contributions:
+
   Biswa:-Frontend progress
   Shreeman and Rashmi :- Backend progress
   Bini:-Architecture and Api testing
