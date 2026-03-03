@@ -83,7 +83,12 @@ function statusBadge(status) {
 }
 function fmtDate(d) {
   if (!d) return '—';
-  return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  // Strip time part if already a full ISO string (e.g. "2024-01-15T00:00:00.000Z")
+  // so we always work with just "YYYY-MM-DD" before adding T00:00:00
+  const dateOnly = String(d).split('T')[0];
+  const parsed = new Date(dateOnly + 'T00:00:00');
+  if (isNaN(parsed)) return '—';
+  return parsed.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
 }
 function fmtCurrency(n) {
   return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n||0);
