@@ -33,6 +33,33 @@ function dateRange(start, end) {
   return dates;
 }
 
+/**
+ * @swagger
+ * /api/leaves/balance/{emp_id}:
+ *   get:
+ *     summary: Get leave balance for an employee
+ *     tags: [Leaves]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: emp_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Employee ID
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: string
+ *         description: Year (default current year)
+ *     responses:
+ *       200:
+ *         description: Leave balance retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+
 // GET /api/leaves/balance/:emp_id
 router.get('/balance/:emp_id', protect, async (req, res) => {
   try {
@@ -67,6 +94,52 @@ router.get('/balance/:emp_id', protect, async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+
+/**
+ * @swagger
+ * /api/leaves/apply:
+ *   post:
+ *     summary: Apply for leave
+ *     tags: [Leaves]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - employee_id
+ *               - leave_type
+ *               - start_date
+ *               - end_date
+ *               - reason
+ *             properties:
+ *               employee_id:
+ *                 type: string
+ *               leave_type:
+ *                 type: string
+ *                 enum: [Sick, Casual, Earned, Unpaid]
+ *               start_date:
+ *                 type: string
+ *                 example: 2026-03-10
+ *               end_date:
+ *                 type: string
+ *                 example: 2026-03-12
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Leave request submitted successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Employee not found
+ *       401:
+ *         description: Unauthorized
+ */
 
 // POST /api/leaves/apply
 router.post('/apply', protect, async (req, res) => {
@@ -139,6 +212,42 @@ router.post('/apply', protect, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/leaves/{id}/approve:
+ *   put:
+ *     summary: Approve leave request
+ *     tags: [Leaves]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Leave Request ID
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               approver_note:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Leave approved successfully
+ *       404:
+ *         description: Leave not found
+ *       400:
+ *         description: Leave already processed
+ *       401:
+ *         description: Unauthorized
+ */
+
+
 // PUT /api/leaves/:id/approve
 router.put('/:id/approve', protect, async (req, res) => {
   try {
@@ -169,6 +278,42 @@ router.put('/:id/approve', protect, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/leaves/{id}/reject:
+ *   put:
+ *     summary: Reject leave request
+ *     tags: [Leaves]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Leave Request ID
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               approver_note:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Leave rejected successfully
+ *       404:
+ *         description: Leave not found
+ *       400:
+ *         description: Leave already processed
+ *       401:
+ *         description: Unauthorized
+ */
+
+
 // PUT /api/leaves/:id/reject
 router.put('/:id/reject', protect, async (req, res) => {
   try {
@@ -188,6 +333,38 @@ router.put('/:id/reject', protect, async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/leaves:
+ *   get:
+ *     summary: Get leave requests (with filters)
+ *     tags: [Leaves]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: employee_id
+ *         schema:
+ *           type: string
+ *         description: Filter by employee ID
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: string
+ *         description: Filter by year
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [Pending, Approved, Rejected]
+ *     responses:
+ *       200:
+ *         description: Leave list retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+
 
 // GET /api/leaves?employee_id=...&year=...&status=...
 router.get('/', protect, async (req, res) => {
