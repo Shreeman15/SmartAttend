@@ -10,7 +10,7 @@
   <div class="main-content">
     <div class="topbar">
       <button class="hamburger" id="hamburger">☰</button>
-      <div class="topbar-title">🏠 My Dashboard</div>
+      <div class="topbar-title"> My Dashboard</div>
       <div class="topbar-actions">
         <span id="topbar-date" style="font-size:0.82rem;color:var(--white-dim)"></span>
       </div>
@@ -51,7 +51,7 @@
       <!-- My leave requests -->
       <div class="card" style="margin-top:24px">
         <div class="section-header">
-          <div class="card-title" style="margin-bottom:0"><span class="icon">🌿</span> My Leave Requests</div>
+          <div class="card-title" style="margin-bottom:0"><span class="icon"></span> My Leave Requests</div>
           <a href="leaves.html" class="btn btn-secondary btn-sm">Apply Leave →</a>
         </div>
         <div class="table-wrapper">
@@ -100,7 +100,7 @@ async function renderPunchCard(user) {
       btnsHtml=`<button class="btn btn-danger btn-lg" onclick="punchOut()">🔴 Punch Out</button>`;
     } else {
       statusHtml=`<div class="punch-status">In: <strong class="text-green">${rec.check_in}</strong> &nbsp;|&nbsp; Out: <strong class="text-red">${rec.check_out}</strong> &nbsp;|&nbsp; ${rec.hours_worked}h &nbsp;|&nbsp; ${statusBadge(rec.status)}</div>`;
-      btnsHtml=`<span class="badge badge-present" style="padding:10px 24px;font-size:0.9rem">✓ Day complete 🎉</span>`;
+      btnsHtml=`<span class="badge badge-present" style="padding:10px 24px;font-size:0.9rem">✓ Day complete </span>`;
     }
     section.innerHTML=`<div class="punch-card">
       <div class="punch-time" id="live-clock">--:--:--</div>
