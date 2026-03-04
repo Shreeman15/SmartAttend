@@ -4,6 +4,7 @@ const cors     = require('cors');
 const dotenv   = require('dotenv');
 const path     = require('path');
 const fs       = require('fs');
+const { swaggerUi, specs } = require('./swagger');
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ const frontendPath = fs.existsSync(path.join(__dirname, '../frontend'))
   : path.join(__dirname, '../../frontend');
 console.log('📁 Frontend:', frontendPath);
 app.use(express.static(frontendPath));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // API Routes
 app.use('/api/auth',       require('./routes/auth'));
@@ -40,8 +43,8 @@ app.get('*', (req, res, next) => {
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
-    app.listen(process.env.PORT || 5000, () =>
-      console.log(`🚀 Server: http://localhost:${process.env.PORT || 5000}`)
+    app.listen(process.env.PORT || 5001, () =>
+      console.log(`🚀 Server: http://localhost:${process.env.PORT || 5001}`)
     );
   })
   .catch(err => { console.error('❌ MongoDB error:', err.message); process.exit(1); });

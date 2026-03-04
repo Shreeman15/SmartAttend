@@ -8,6 +8,29 @@ const { protect } = require('../middleware/auth');
 const todayStr = () => new Date().toISOString().split('T')[0];
 const timeStr  = () => new Date().toTimeString().slice(0,5); // HH:MM
 
+/**
+ * @swagger
+ * tags:
+ *   name: Attendance
+ *   description: Attendance management APIs
+ */
+
+/**
+ * @swagger
+ * /api/attendance/punch-in:
+ *   post:
+ *     summary: Employee punch in
+ *     tags: [Attendance]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Punch in recorded
+ *       400:
+ *         description: Already punched in
+ */
+
+
 // POST /api/attendance/punch-in  (employee punches in)
 router.post('/punch-in', protect, async (req, res) => {
   try {
@@ -31,6 +54,23 @@ router.post('/punch-in', protect, async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+
+/**
+ * @swagger
+ * /api/attendance/punch-out:
+ *   post:
+ *     summary: Employee punch out
+ *     tags: [Attendance]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Punch out recorded
+ *       400:
+ *         description: Already punched out or no punch-in found
+ */
+
 
 // POST /api/attendance/punch-out  (employee punches out)
 router.post('/punch-out', protect, async (req, res) => {

@@ -6,6 +6,61 @@ const { protect } = require('../middleware/auth');
 
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication APIs
+ */
+
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new employee
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - department
+ *               - designation
+ *               - base_salary
+ *               - joining_date
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *               designation:
+ *                 type: string
+ *               base_salary:
+ *                 type: number
+ *               joining_date:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Employee registered successfully
+ *       400:
+ *         description: Validation error
+ */
+
+
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
@@ -38,6 +93,35 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login employee
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       401:
+ *         description: Invalid credentials
+ */
+
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
