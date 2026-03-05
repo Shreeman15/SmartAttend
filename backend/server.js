@@ -23,7 +23,7 @@ console.log('📁 Frontend:', frontendPath);
 
 app.use(express.static(frontendPath));
 
-// Swagger
+// Swagger docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // API Routes
@@ -39,31 +39,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Root route (to avoid 404 on Vercel)
+// Root route
 app.get('/', (req, res) => {
-  res.send('SmartAttend Backend API Running 🚀');
-});
-
-// Fallback to index.html
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
-
-  const idx = path.join(frontendPath, 'index.html');
-
-  if (fs.existsSync(idx)) {
-    res.sendFile(idx);
-  } else {
-    res.status(404).send('Frontend not found');
-  }
+  res.send('SmartAttend Backend Running 🚀');
 });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('✅ MongoDB Connected');
-  })
-  .catch(err => {
-    console.error('❌ MongoDB error:', err.message);
-  });
+if (!mongoose.connection.readyState) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('✅ MongoDB Connected'))
+    .catch(err => console.error('❌ MongoDB error:', err.message));
+}
 
 module.exports = app;
