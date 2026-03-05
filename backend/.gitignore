@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 node_modules/
 backend/node_modules/
+=======
+node_modules
+>>>>>>> c92f5b2 (added gitignore and removed node_modules)
 .env
