@@ -1,7 +1,7 @@
 // =============================================
 //  HR System — api.js (shared)
 // =============================================
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'http://localhost:5001/api';
 
 const getToken  = () => localStorage.getItem('hr_token');
 const getUser   = () => { try { return JSON.parse(localStorage.getItem('hr_user')); } catch { return null; } };
@@ -53,7 +53,7 @@ async function apiFetch(endpoint, options = {}) {
     return data;
   } catch (err) {
     if (err.message.includes('Failed to fetch'))
-      throw new Error('Cannot reach server. Make sure backend is running on port 5000.');
+      throw new Error('Cannot reach server. Make sure backend is running on port 5001.');
     throw err;
   }
 }
