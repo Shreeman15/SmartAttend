@@ -18,9 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 const frontendPath = fs.existsSync(path.join(__dirname, '../frontend'))
   ? path.join(__dirname, '../frontend')
   : path.join(__dirname, '../../frontend');
+
 console.log('📁 Frontend:', frontendPath);
+
 app.use(express.static(frontendPath));
 
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // API Routes
@@ -31,22 +34,36 @@ app.use('/api/leaves',     require('./routes/leaves'));
 app.use('/api/reports',    require('./routes/reports'));
 app.use('/api/dashboard',  require('./routes/dashboard'));
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Root route (to avoid 404 on Vercel)
+app.get('/', (req, res) => {
+  res.send('SmartAttend Backend API Running 🚀');
+});
 
 // Fallback to index.html
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) return next();
+
   const idx = path.join(frontendPath, 'index.html');
-  fs.existsSync(idx) ? res.sendFile(idx) : res.status(404).send('Frontend not found');
+
+  if (fs.existsSync(idx)) {
+    res.sendFile(idx);
+  } else {
+    res.status(404).send('Frontend not found');
+  }
 });
 
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
-    app.listen(process.env.PORT || 5001, () =>
-      console.log(`🚀 Server: http://localhost:${process.env.PORT || 5001}`)
-    );
   })
-  .catch(err => { console.error('❌ MongoDB error:', err.message); process.exit(1); });
+  .catch(err => {
+    console.error('❌ MongoDB error:', err.message);
+  });
 
 module.exports = app;
