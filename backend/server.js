@@ -15,40 +15,36 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve frontend
-const frontendPath = fs.existsSync(path.join(__dirname, '../frontend'))
-  ? path.join(__dirname, '../frontend')
-  : path.join(__dirname, '../../frontend');
-
-console.log('📁 Frontend:', frontendPath);
-
+const frontendPath = path.join(__dirname, '../frontend');
 app.use(express.static(frontendPath));
 
-// Swagger docs
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-// API Routes
-app.use('/api/auth',       require('./routes/auth'));
-app.use('/api/employees',  require('./routes/employees'));
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/employees', require('./routes/employees'));
 app.use('/api/attendance', require('./routes/attendance'));
-app.use('/api/leaves',     require('./routes/leaves'));
-app.use('/api/reports',    require('./routes/reports'));
-app.use('/api/dashboard',  require('./routes/dashboard'));
+app.use('/api/leaves', require('./routes/leaves'));
+app.use('/api/reports', require('./routes/reports'));
+app.use('/api/dashboard', require('./routes/dashboard'));
 
-// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Root route
 app.get('/', (req, res) => {
   res.send('SmartAttend Backend Running 🚀');
 });
 
-// MongoDB connection
-if (!mongoose.connection.readyState) {
-  mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB error:', err.message));
-}
+// MongoDB
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log('✅ MongoDB Connected'))
+.catch(err => console.error(err));
 
-module.exports = app;
+// 🚀 START SERVER
+const PORT = process.env.PORT || 5001;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
