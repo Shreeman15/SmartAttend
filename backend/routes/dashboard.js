@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Employee = require('../models/employee');
-const Attendance = require('../models/Attendance');
+const Attendance = require('../models/attendance');
 const LeaveRequest = require('../models/LeaveRequest');
 const { protect } = require('../middleware/auth');
 
