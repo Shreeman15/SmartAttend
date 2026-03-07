@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://smartattend-s6la.onrender.com/",
+        url: "https://smartattend-s6la.onrender.com/",
       },
     ],
     components: {

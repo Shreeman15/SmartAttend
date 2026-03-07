@@ -1,7 +1,7 @@
 // =============================================
 //  HR System — api.js (shared)
 // =============================================
-const BASE_URL = "http://smartattend-s6la.onrender.com//api";
+const BASE_URL = 'https://smartattend-s6la.onrender.com/api';
 
 const getToken = () => localStorage.getItem("hr_token");
 const getUser = () => {

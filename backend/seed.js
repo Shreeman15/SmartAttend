@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const Employee = require('./models/Employee');
-const Attendance = require('./models/Attendance');
+const Employee = require('./models/employee');
+const Attendance = require('./models/attendance');
 const LeaveRequest = require('./models/LeaveRequest');
 
 const employees = [
