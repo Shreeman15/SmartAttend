@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Attendance = require('../models/Attendance');
-const Employee = require('../models/Employee');
+const Employee = require('../models/employee');
 const { protect } = require('../middleware/auth');
 
 // Helper: today's date string YYYY-MM-DD
