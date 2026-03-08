@@ -12,13 +12,14 @@ Created the GitHub repository and added all team members as collaborators.
 
 *Team Contributions*:
 
-Bini Choudhary and Shreeman – Designed the ER Diagram and set up the GitHub repository with collaborator access also Give the testing of all Elements.
+Bini Choudhury and Shreeman – Designed the ER Diagram and set up the GitHub repository with collaborator access also Give the testing of all Elements.
 Biswaranjan – Developed the frontend navigation and handled the UI page routing.
 Rohit – Managed backend setup and MongoDB database configuration.
 The team is progressing as per the planned timeline and coordination among members is smooth.
 
-![WhatsApp Image 2026-02-24 at 12 43 50 PM](https://github.com/user-attachments/assets/de76dd1c-9abf-4be5-b071-2d3144dfc4e3)
 
+
+![WhatsApp Image 2026-03-05 at 10 12 35 AM](https://github.com/user-attachments/assets/3e3fde00-7e88-4089-b42b-9bac882d8bc0)
 
 
 Day:2
@@ -141,6 +142,7 @@ Day:4
 =====
 
 Today we completed the following tasks in both Frontend and Backend:
+
 🔹 Implemented Salary Calculation Module
    Backend logic for salary computation
    Frontend integration and display
@@ -155,11 +157,12 @@ Today we completed the following tasks in both Frontend and Backend:
    All modules were successfully integrated and tested from frontend to backend.
 
 
-Day 5 Progress Update – SmartAttend Project
+Day:5
+===== 
 
 Today’s session focused on enhancing core system functionality and improving integration stability between frontend and backend.
 
-🔧 Backend Progress
+ 🔹Backend Progress
 
 Strengthened authentication flow (login/register validation improved)
 
@@ -169,7 +172,7 @@ Attendance APIs refined (Punch In / Punch Out accuracy)
 
 Error handling added for invalid user cases
 
-💻 Frontend Progress
+🔹 Frontend Progress
 
 Dashboard UI enhancements for better user experience
 
@@ -179,7 +182,7 @@ Navbar updated with logged-in user info
 
 Improved API integration with backend services
 
-🔗 Integration Work
+🔹 Integration Work
 
 Full login-to-dashboard connectivity tested
 
@@ -187,13 +190,27 @@ Role-based flow verified (Admin vs Employee)
 
 Stable communication between frontend and backend ensured
 
-👥 Team Contributions
+ Team Contributions
 
 Biswaranjan – Frontend integration and dashboard connectivity
 
-Backend Team – API optimization and authentication fixes
+Shreeman & Rashmi – API optimization and authentication fixes
 
-Testing Support – API validation and flow testing
+Bini – API validation and flow testing
+
+![Register_page](https://github.com/user-attachments/assets/c6a5dc93-aa67-48d6-b50b-de6b892d2ac6)
+![Login_page](https://github.com/user-attachments/assets/ee20ae3f-d3ec-462a-acb3-4bdf53c8bd65)
+![Dashboard](https://github.com/user-attachments/assets/f3c3fd1b-8478-470b-b168-7648d9551cff)
+![Attendance_page](https://github.com/user-attachments/assets/d646f5b5-5872-4944-88c3-ed820954a83e)
+![Leave_page](https://github.com/user-attachments/assets/ffbc0c8d-3e3f-45d5-a443-7d81c7d36ebb)
+![Salary](https://github.com/user-attachments/assets/7197a19d-c665-457c-9e9e-0225dcce97c2)
+![Profile_page](https://github.com/user-attachments/assets/203e82a8-244f-45f9-b752-9c7a540b268d)
+![Admin_dashboard](https://github.com/user-attachments/assets/4c439151-6848-4ce5-94a5-34d9699a31ce)
+
+
+
+
+
 
 
 
