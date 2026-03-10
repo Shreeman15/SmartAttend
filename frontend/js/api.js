@@ -1,10 +1,12 @@
 // =============================================
 //  HR System — api.js (shared)
 // =============================================
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'http://localhost:5001/api';
+
 
 const getToken  = () => localStorage.getItem('hr_token');
 const getUser   = () => { try { return JSON.parse(localStorage.getItem('hr_user')); } catch { return null; } };
+
 const setAuth   = (token, user) => { localStorage.setItem('hr_token', token); localStorage.setItem('hr_user', JSON.stringify(user)); };
 const clearAuth = () => { localStorage.removeItem('hr_token'); localStorage.removeItem('hr_user'); };
 

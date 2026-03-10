@@ -18,6 +18,7 @@ const timeStr  = () => new Date().toTimeString().slice(0,5); // HH:MM
 
 /**
  * @swagger
+ * 
  * /api/attendance/punch-in:
  *   post:
  *     summary: Employee punch in
