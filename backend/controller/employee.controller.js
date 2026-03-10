@@ -1,4 +1,4 @@
-import Employee from "../models/employee.js"
+import Employee from "../models/employees.js"
 
 /**
  * @desc   Create employee
