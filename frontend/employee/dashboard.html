@@ -74,11 +74,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
 
   const now  = new Date();
-  const hour = now.getHours();
+  const hour = new Date().toLocaleString("en-IN",{
+  timeZone:"Asia/Kolkata",
+  hour:"numeric",
+  hour12:false
+});
   const greet= hour<12?'Morning':hour<17?'Afternoon':'Evening';
   document.getElementById('greeting-time').textContent = greet;
   document.getElementById('welcome-name').textContent  = user.name+' · '+user.department+' · '+user.designation;
-  document.getElementById('topbar-date').textContent   = now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  
+  document.getElementById('topbar-date').textContent =
+now.toLocaleDateString("en-IN",{
+  timeZone:"Asia/Kolkata",
+  weekday:"long",
+  year:"numeric",
+  month:"long",
+  day:"numeric"
+});
 
   renderPunchCard(user);
   loadEmpStats(user);
@@ -104,10 +116,37 @@ async function renderPunchCard(user) {
     }
     section.innerHTML=`<div class="punch-card">
       <div class="punch-time" id="live-clock">--:--:--</div>
-      <div class="punch-date">${new Date().toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</div>
+      
+      <div class="punch-date">
+${new Date().toLocaleDateString("en-IN",{
+  timeZone:"Asia/Kolkata",
+  weekday:"long",
+  month:"long",
+  day:"numeric",
+  year:"numeric"
+})}
+</div>
+
       ${statusHtml}<div class="punch-btns">${btnsHtml}</div>
     </div>`;
-    const tick=()=>{const el=document.getElementById('live-clock');if(el)el.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});};
+   
+    const tick = () => {
+  const el = document.getElementById("live-clock");
+
+  if (el) {
+    const now = new Date();
+
+    const time = now.toLocaleTimeString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+    el.textContent = time;
+  }
+};
+
     tick(); setInterval(tick,1000);
   } catch(err) { section.innerHTML=`<div class="alert alert-error">⚠ ${err.message}</div>`; }
 }
