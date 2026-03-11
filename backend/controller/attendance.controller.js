@@ -4,13 +4,22 @@ import Attendance from "../models/attendance.js";
  * Convert current time to IST
  */
 const getISTTime = () => {
-  const now = new Date();
-  const istTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-  );
-  return istTime;
+  return new Date().toLocaleTimeString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
 };
 
+
+
+// data
+const getISTDate = () => {
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata"
+  });
+};
 /**
  * @desc   Mark attendance
  * @route  POST /api/attendance
@@ -21,16 +30,16 @@ export const markAttendance = async (req, res) => {
     const { status } = req.body;
 
     // Current IST time
-    const istNow = getISTTime();
-
+    const time = getISTTime();
+    const date = getISTDate();
+    
     const attendance = await Attendance.create({
       employee_id: req.user.id,
-      date: istNow,
-      check_in: istNow,
+      date: date,
+      check_in: time,
       check_out: null,
-      status: status || "present",
+      status: status || "Present",
     });
-
     res.status(201).json({
       success: true,
       data: attendance,
