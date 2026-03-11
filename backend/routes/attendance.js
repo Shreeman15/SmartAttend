@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// const Attendance = require('../models/Attendance');
+const Attendance = require('../models/Attendance');
 const Employee = require('../models/Employee');
 const { protect } = require('../middleware/auth');
 const { body, query, param, validationResult } = require('express-validator');
