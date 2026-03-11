@@ -1,7 +1,7 @@
 // =============================================
 //  HR System — api.js (shared)
 // =============================================
-const BASE_URL = 'http://localhost:5001/api';
+const BASE_URL = 'http://localhost:5002/api';
 
 
 const getToken  = () => localStorage.getItem('hr_token');

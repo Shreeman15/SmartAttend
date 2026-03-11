@@ -23,15 +23,11 @@ Swagger UI was used to test and verify all REST API endpoints.
 
 1. Start the backend server
 
-
 npm start
-
 
 2. Open Swagger UI in the browser
 
-
-http://localhost:5001/api-docs
-
+http://localhost:5002/api-docs
 
 3. Click **Authorize** and provide the JWT token.
 
@@ -45,9 +41,7 @@ http://localhost:5001/api-docs
 
 Endpoint:
 
-
 POST /api/attendance/punch-in
-
 
 Expected Result:
 
@@ -66,9 +60,7 @@ Attempt to punch in twice on the same day.
 
 Endpoint:
 
-
 POST /api/attendance/punch-in
-
 
 Expected Result:
 
@@ -85,9 +77,7 @@ Result: **Passed**
 
 Endpoint:
 
-
 POST /api/leaves/apply
-
 
 Example Request Body:
 
@@ -207,3 +197,4 @@ Leave Management APIs
 Salary Report APIs
 
 Swagger UI was used for interactive API testing and validation of request and response structures.
+```

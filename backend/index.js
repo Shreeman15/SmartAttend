@@ -10,10 +10,6 @@ import leaveTypeRoutes from "./routes/leaveType.routes.js";
 import leaveRequestRoutes from "./routes/leaveRequest.routes.js";
 import cookieParser from "cookie-parser";
 
-
-
-
-
 dotenv.config();
 
 // Connect to DB
@@ -47,8 +43,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Start Server
-const PORT = process.env.PORT || 5001;
-
+const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
