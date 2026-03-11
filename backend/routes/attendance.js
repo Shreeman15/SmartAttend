@@ -3,6 +3,7 @@ const router = express.Router();
 const Attendance = require('../models/attendance');
 const Employee = require('../models/employee');
 const { protect } = require('../middleware/auth');
+const { body, query, param, validationResult } = require('express-validator');
 
 // Helper: today's date string YYYY-MM-DD
 const todayStr = () => new Date().toISOString().split('T')[0];
@@ -17,6 +18,7 @@ const timeStr  = () => new Date().toTimeString().slice(0,5); // HH:MM
 
 /**
  * @swagger
+ * 
  * /api/attendance/punch-in:
  *   post:
  *     summary: Employee punch in
