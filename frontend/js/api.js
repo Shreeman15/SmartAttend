@@ -1,14 +1,25 @@
 // =============================================
 //  HR System — api.js (shared)
 // =============================================
-const BASE_URL = 'http://localhost:5002/api';
+const BASE_URL = "http://localhost:5002/api";
 
+const getToken = () => localStorage.getItem("hr_token");
+const getUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("hr_user"));
+  } catch {
+    return null;
+  }
+};
 
-const getToken  = () => localStorage.getItem('hr_token');
-const getUser   = () => { try { return JSON.parse(localStorage.getItem('hr_user')); } catch { return null; } };
-
-const setAuth   = (token, user) => { localStorage.setItem('hr_token', token); localStorage.setItem('hr_user', JSON.stringify(user)); };
-const clearAuth = () => { localStorage.removeItem('hr_token'); localStorage.removeItem('hr_user'); };
+const setAuth = (token, user) => {
+  localStorage.setItem("hr_token", token);
+  localStorage.setItem("hr_user", JSON.stringify(user));
+};
+const clearAuth = () => {
+  localStorage.removeItem("hr_token");
+  localStorage.removeItem("hr_user");
+};
 
 // Determine current folder (admin/ or employee/)
 const isAdminPage = () => window.location.pathname.includes("/admin/");
@@ -63,7 +74,7 @@ async function apiFetch(endpoint, options = {}) {
   } catch (err) {
     if (err.message.includes("Failed to fetch"))
       throw new Error(
-        "Cannot reach server. Make sure backend is running on port 5001."
+        "Cannot reach server. Make sure backend is running on port 5002."
       );
     throw err;
   }
