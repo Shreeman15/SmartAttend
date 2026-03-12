@@ -108,10 +108,15 @@ async function renderPunchCard(user) {
       statusHtml=`<div class="punch-status text-dim">You haven't checked in yet today</div>`;
       btnsHtml=`<button class="btn btn-primary btn-lg" onclick="punchIn()">🟢 Punch In</button>`;
     } else if (rec.check_in && !rec.check_out) {
-      statusHtml=`<div class="punch-status text-green">✅ Punched in at <strong>${rec.check_in}</strong></div>`;
+      statusHtml=`<div class="punch-status text-green">✅ Punched in at <strong>${convertToIST(rec.check_in)}</strong></div>`;
       btnsHtml=`<button class="btn btn-danger btn-lg" onclick="punchOut()">🔴 Punch Out</button>`;
     } else {
-      statusHtml=`<div class="punch-status">In: <strong class="text-green">${rec.check_in}</strong> &nbsp;|&nbsp; Out: <strong class="text-red">${rec.check_out}</strong> &nbsp;|&nbsp; ${rec.hours_worked}h &nbsp;|&nbsp; ${statusBadge(rec.status)}</div>`;
+      statusHtml=`<div class="punch-status">
+In: <strong class="text-green">${convertToIST(rec.check_in)}</strong> |
+Out: <strong class="text-red">${convertToIST(rec.check_out)}</strong> |
+${rec.hours_worked}h |
+${statusBadge(rec.status)}
+</div>`;
       btnsHtml=`<span class="badge badge-present" style="padding:10px 24px;font-size:0.9rem">✓ Day complete </span>`;
     }
     section.innerHTML=`<div class="punch-card">
@@ -171,6 +176,19 @@ async function loadEmpStats(user) {
   } catch(err) { document.getElementById('emp-stats').innerHTML=`<div class="alert alert-error" style="grid-column:1/-1">⚠ ${err.message}</div>`; }
 }
 
+function convertToIST(time) {
+  if (!time || time === "—") return "—";
+
+  const date = new Date(`1970-01-01T${time}:00Z`);
+
+  return date.toLocaleTimeString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+
 async function loadRecentAttendance(user) {
   const tbody=document.getElementById('recent-att');
   try {
@@ -178,8 +196,11 @@ async function loadRecentAttendance(user) {
     const res=await api.get(`/attendance/my-history?month=${m}&year=${y}`);
     if (!res.data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--white-dim)">No records this month</td></tr>';return;}
     tbody.innerHTML=res.data.slice(0,7).map(r=>`<tr>
-      <td>${fmtDate(r.date)}</td><td>${r.check_in||'—'}</td><td>${r.check_out||'—'}</td>
-      <td>${r.hours_worked?r.hours_worked+'h':'—'}</td><td>${statusBadge(r.status)}</td>
+     <td>${fmtDate(r.date)}</td>
+      <td>${convertToIST(r.check_in)}</td>
+      <td>${convertToIST(r.check_out)}</td>
+      <td>${r.hours_worked?r.hours_worked+'h':'—'}</td>
+      <td>${statusBadge(r.status)}</td>
     </tr>`).join('');
   } catch(err){tbody.innerHTML=`<tr><td colspan="5"><div class="alert alert-error">⚠ ${err.message}</div></td></tr>`;}
 }
