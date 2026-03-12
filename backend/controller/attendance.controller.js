@@ -1,28 +1,50 @@
 import Attendance from "../models/attendance.js";
 
 /**
+ * Convert current time to IST
+ */
+const getISTTime = () => {
+  return new Date().toLocaleTimeString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+};
+
+
+
+// data
+const getISTDate = () => {
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata"
+  });
+};
+/**
  * @desc   Mark attendance
  * @route  POST /api/attendance
  * @access Employee
  */
 export const markAttendance = async (req, res) => {
   try {
-    const { date, check_in, check_out, status } = req.body;
+    const { status } = req.body;
 
+    // Current IST time
+    const time = getISTTime();
+    const date = getISTDate();
+    
     const attendance = await Attendance.create({
       employee_id: req.user.id,
-      date,
-      check_in,
-      check_out,
-      status,
+      date: date,
+      check_in: time,
+      check_out: null,
+      status: status || "Present",
     });
-
     res.status(201).json({
       success: true,
       data: attendance,
     });
   } catch (error) {
-    // Duplicate attendance error
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Attendance already marked for this day",
@@ -32,6 +54,7 @@ export const markAttendance = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 /**
  * @desc   Get employee monthly attendance
@@ -79,6 +102,7 @@ export const getAttendanceByEmployee = async (req, res) => {
   }
 };
 
+
 /**
  * @desc   Get daily attendance for all employees
  * @route  GET /api/attendance/daily?date=
@@ -114,6 +138,7 @@ export const getDailyAttendance = async (req, res) => {
   }
 };
 
+
 /**
  * @desc   Update attendance
  * @route  PUT /api/attendance/:id
@@ -121,9 +146,16 @@ export const getDailyAttendance = async (req, res) => {
  */
 export const updateAttendance = async (req, res) => {
   try {
+    const updateData = { ...req.body };
+
+    // Convert check_out to IST if updating
+    if (updateData.check_out) {
+      updateData.check_out = getISTTime();
+    }
+
     const attendance = await Attendance.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true }
     );
 
