@@ -324,6 +324,8 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 .badge-absent   { background: rgba(255,82,82,0.15);  color: var(--red); }
 .badge-halfday  { background: rgba(255,171,64,0.15); color: var(--amber); }
 .badge-leave    { background: rgba(179,136,255,0.15);color: var(--purple); }
+.badge-open     { background: rgba(255,171,64,0.15); color: var(--amber); }
+.badge-progress { background: rgba(0,212,255,0.15); color: var(--cyan); }
 .badge-pending  { background: rgba(255,171,64,0.15); color: var(--amber); }
 .badge-approved { background: rgba(0,230,118,0.15);  color: var(--green); }
 .badge-rejected { background: rgba(255,82,82,0.15);  color: var(--red); }

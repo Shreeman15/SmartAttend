@@ -1,199 +1,277 @@
-Day:1
-======
-Please find below the progress update for today from Group 3:
-Work Completed:
-Designed and finalized the ER Diagram for the project database structure.
-Created and configured the MongoDB database.
-Implemented frontend navigation across different pages.   
+# Employee Attendance Management System
 
-Configured CORS for backend–frontend integration.
-Created the GitHub repository and added all team members as collaborators.
+A full‑stack **Employee Attendance Management System** built to manage employee authentication, attendance tracking, leave requests, salary calculation, and administrative monitoring.
 
+The system provides a centralized platform where employees can securely access their dashboard, mark attendance using punch‑in and punch‑out functionality, apply for leave, and view salary information. Administrators can manage employee data, monitor attendance records, and maintain organizational workflow efficiently.
 
-*Team Contributions*:
+---
 
-Bini Choudhary and Shreeman – Designed the ER Diagram and set up the GitHub repository with collaborator access also Give the testing of all Elements.
-Biswaranjan – Developed the frontend navigation and handled the UI page routing.
-Rohit – Managed backend setup and MongoDB database configuration.
-The team is progressing as per the planned timeline and coordination among members is smooth.
+# System Architecture
 
-![WhatsApp Image 2026-02-24 at 12 43 50 PM](https://github.com/user-attachments/assets/de76dd1c-9abf-4be5-b071-2d3144dfc4e3)
+The application follows a **3‑Tier Architecture** to ensure clean separation between interface, logic, and data layers.
 
+## Presentation Layer (Frontend)
 
+Responsible for user interaction and UI rendering.
 
-Day:2
-=====
+Features:
+- Employee Dashboard
+- Login & Registration Interface
+- Attendance Management
+- Leave Request Interface
+- Admin Dashboard
 
-*Day-2 Status*
+Technologies:
 
-🔹 Backend Development
+HTML5  
+CSS3  
+JavaScript  
 
-Completed routing structure for the application.
+---
 
-Implemented Employee Authentication Module (login & validation flow).
+## Application Layer (Backend)
 
-Developed Admin Module with required access controls.
+Handles business logic and API processing.
 
-Implemented Employee Entry Module.
+Responsibilities include:
 
-Integrated Employee ID Reading functionality.
+- User authentication
+- Attendance tracking logic
+- Leave management
+- Salary calculation
+- API request validation
+- Admin operations
 
-Configured logic for Employee Entry Records Management.
+Technologies:
 
-Implemented Total Employee Count Update functionality.
+Node.js  
+Express.js  
 
-Backend APIs were tested and validated for proper request/response handling.
+---
 
-🔹 Frontend Development
+## Data Layer (Database)
 
-Designed and implemented the Clock UI component.
+Responsible for persistent data storage.
 
-Completed Sidebar navigation layout.
+Data stored includes:
 
-Developed Navbar component with consistent styling.
+- Employee records
+- Attendance logs
+- Leave history
+- Authentication data
+- Salary information
 
-Established the overall UI structure and base layout.
+Technology:
 
-Ensured alignment between frontend interface and backend API structure.
+MongoDB
 
-🔹 Testing & Validation
+---
 
-API endpoints tested using Thunder Client.
+# 🧠 ER Diagram
 
-Verified authentication flows and routing responses.
+The database structure of the system is defined using an **Entity Relationship Diagram (ERD)** which models the relationships between employees, attendance records, leave requests, and salary data.
 
-Ensured proper integration between frontend and backend modules.
+![ER Diagram](https://github.com/user-attachments/assets/3e3fde00-7e88-4089-b42b-9bac882d8bc0)
 
-🔹 Team Contributions
+---
 
-Bini – Led the design phase and constructed the UI layout structure.
+# 🛠 Technology Stack
 
-Biswa – Handled complete frontend development and UI integration.
+| Category | Technologies |
+|----------|-------------|
+| Frontend | HTML5, CSS3, JavaScript |
+| Backend | Node.js, Express.js |
+| Database | MongoDB |
+| Authentication | JSON Web Token (JWT) |
+| API Communication | REST APIs, JSON |
+| Version Control | Git, GitHub |
+| API Testing | Swagger |
+| Deployment | Render |
 
-Shreeman – Conducted backend API testing and validation using Thunder Client.
+---
 
-Rashmi – Developed backend modules, especially authentication and routing logic.
+# Key Features
 
-Overall, Day 2 progress is aligned with our planned milestones. Core backend routing and frontend UI foundation are successfully established, and initial testing confirms functional stability. 
+### Employee Authentication
+Secure login and registration system allowing employees and administrators to access the system.
 
+### Attendance Tracking
+Employees can mark daily attendance using **Punch In** and **Punch Out** functionality.
 
-
-Day:3
-=====
-Today’s session focused on frontend–backend integration and strengthening the core application flow.
-
-🔹 Backend Progress
-
-Implemented API structure and routing
-
-Completed User Authentication
-
-Register API
-
-Login API
-
-Developed Employee Dashboard APIs
-
-Database integration completed for:
-
-User registration data
-
-Login authentication
-
-Employee dashboard records
-
-🔹 Frontend Progress
-
-Connected frontend with backend APIs
-
-Implemented key UI pages:
-
-Login Page
-
-Register Page
-
-Dashboard UI
-
-Punch In functionality
-
-Punch Out functionality
-
-Initial setup of Admin Panel structure
-
-🔹 Integration Highlights
-
-Successful API consumption in frontend
-
-Verified end-to-end authentication flow
-
-Backend APIs now structured and ready for scaling
-
-🔹Team contributions:
-
-  Biswa:-Frontend progress
-  
-  Shreeman and Rashmi :- Backend progress
-  
-  Bini:-Architecture and Api testing
-  
-
-Day:4
-=====
-
-Today we completed the following tasks in both Frontend and Backend:
-🔹 Implemented Salary Calculation Module
-   Backend logic for salary computation
-   Frontend integration and display
-
-🔹 Developed Leave History Feature
-   Leave records fetching from database
-   UI display of employee leave history
-
-🔹 Implemented Admin – Employee Fetch Functionality
-   Backend API to fetch employee details
-   Connected frontend to display employee data for admin
-   All modules were successfully integrated and tested from frontend to backend.
-
-
-Day 5 Progress Update – SmartAttend Project
-
-Today’s session focused on enhancing core system functionality and improving integration stability between frontend and backend.
-
-🔧 Backend Progress
-
-Strengthened authentication flow (login/register validation improved)
-
-API optimization for faster dashboard loading
-
-Attendance APIs refined (Punch In / Punch Out accuracy)
-
-Error handling added for invalid user cases
-
-💻 Frontend Progress
-
-Dashboard UI enhancements for better user experience
-
-Real-time attendance status display implemented
-
-Navbar updated with logged-in user info
-
-Improved API integration with backend services
-
-🔗 Integration Work
-
-Full login-to-dashboard connectivity tested
-
-Role-based flow verified (Admin vs Employee)
-
-Stable communication between frontend and backend ensured
-
-👥 Team Contributions
-
-Biswaranjan – Frontend integration and dashboard connectivity
-
-Backend Team – API optimization and authentication fixes
-
-Testing Support – API validation and flow testing
-
-
-
+### Leave Management
+Employees can apply for leave and view leave history.
+
+### Salary Calculation
+Automated salary calculation based on attendance records.
+
+### Employee Dashboard
+Employees can view attendance, leave history, and system information.
+
+### Admin Dashboard
+Administrators can monitor employee records and attendance activities.
+
+---
+
+# User Interface
+
+### Register Page
+![Register Page](https://github.com/user-attachments/assets/c6a5dc93-aa67-48d6-b50b-de6b892d2ac6)
+
+### Login Page
+![Login Page](https://github.com/user-attachments/assets/ee20ae3f-d3ec-462a-acb3-4bdf53c8bd65)
+
+### Dashboard
+![Dashboard](https://github.com/user-attachments/assets/f3c3fd1b-8478-470b-b168-7648d9551cff)
+
+### Attendance Page
+![Attendance](https://github.com/user-attachments/assets/d646f5b5-5872-4944-88c3-ed820954a83e)
+
+### Leave Management
+![Leave](https://github.com/user-attachments/assets/ffbc0c8d-3e3f-45d5-a443-7d81c7d36ebb)
+
+### Salary Module
+![Salary](https://github.com/user-attachments/assets/7197a19d-c665-457c-9e9e-0225dcce97c2)
+
+### Profile Page
+![Profile](https://github.com/user-attachments/assets/203e82a8-244f-45f9-b752-9c7a540b268d)
+
+### Admin Dashboard
+![Admin Dashboard](https://github.com/user-attachments/assets/4c439151-6848-4ce5-94a5-34d9699a31ce)
+
+---
+
+# 📂 Project Structure
+
+```
+SmartAttend/
+│
+├── backend
+│   │
+│   ├── config
+│   │   └── db.js
+│   │
+│   ├── controllers
+│   │   ├── attendance.controller.js
+│   │   ├── auth.controller.js
+│   │   ├── employee.controller.js
+│   │   └── leaveRequest.controller.js
+│   │
+│   ├── middleware
+│   │   └── auth_middleware.js
+│   │
+│   ├── models
+│   │   ├── attendance.js
+│   │   ├── employee.js
+│   │   ├── leaveRequest.js
+│   │   ├── leaveType.js
+│   │   └── user.js
+│   │
+│   ├── routes
+│   │   ├── attendance.routes.js
+│   │   ├── auth.routes.js
+│   │   ├── dashboard.js
+│   │   ├── employee.routes.js
+│   │   ├── leave.routes.js
+│   │   ├── leaveType.routes.js
+│   │   └── reports.js
+│   │
+│   ├── server.js
+│   ├── swagger.js
+│   ├── seed.js
+│   └── package.json
+│
+├── frontend
+│   │
+│   ├── admin
+│   │   ├── add-employee.html
+│   │   ├── attendance.html
+│   │   ├── dashboard.html
+│   │   ├── employees.html
+│   │   ├── leaves.html
+│   │   ├── reports.html
+│   │   └── salary.html
+│   │
+│   ├── css
+│   │   └── style.css
+│   │
+│   ├── employee
+│   │   ├── attendance.html
+│   │   ├── dashboard.html
+│   │   ├── leave.html
+│   │   ├── profile.html
+│   │   └── salary.html
+│   │
+│   ├── js
+│   │   ├── admin-sidebar.js
+│   │   ├── api.js
+│   │   └── employee-sidebar.js
+│   │
+│   ├── index.html
+│   ├── login.html
+│   └── register.html
+│
+└── README.md
+```
+
+---
+
+# Development Progress
+
+### Day 1
+- Designed ER Diagram for database schema
+- Configured MongoDB database
+- Implemented frontend navigation
+- Configured backend CORS
+- Created GitHub repository and collaborator access
+
+### Day 2
+- Implemented backend routing structure
+- Developed authentication modules
+- Designed UI components (Navbar, Sidebar, Clock)
+- Established frontend layout structure
+- Tested APIs using Thunder Client
+
+### Day 3
+- Integrated frontend with backend APIs
+- Implemented Login and Register APIs
+- Connected dashboard with database records
+- Implemented Punch In and Punch Out functionality
+- Initial admin panel setup
+
+### Day 4
+- Implemented salary calculation module
+- Implemented leave history functionality
+- Developed admin employee APIs
+- Integrated frontend with backend modules
+
+### Day 5
+- Improved authentication validation
+- Optimized dashboard API performance
+- Enhanced UI experience
+- Implemented role‑based access
+- Conducted end‑to‑end integration testing
+
+---
+
+# Team Members
+
+Shreeman Kumar  
+Bini Choudhury  
+Biswaranjan  
+Rashmi  
+
+---
+
+# Future Improvements
+
+- Notification system for attendance and leave
+- Mobile responsive UI
+- Advanced reporting dashboard
+- Performance optimization
+- Enhanced admin analytics
+
+---
+
+# License
+
+This project was developed for academic and internship development purposes.

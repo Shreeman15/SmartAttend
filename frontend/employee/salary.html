@@ -20,13 +20,13 @@
   <div class="main-content">
     <div class="topbar">
       <button class="hamburger" id="hamburger">☰</button>
-      <div class="topbar-title">💰 My Salary</div>
+      <div class="topbar-title"> My Salary</div>
     </div>
     <div class="page-body">
 
       <div class="card" style="max-width:750px">
         <div class="section-header">
-          <div class="card-title" style="margin-bottom:0"><span class="icon">💰</span> My Salary Slip</div>
+          <div class="card-title" style="margin-bottom:0"><span class="icon"></span> My Salary Slip</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <select id="sal-month" style="width:120px"></select>
             <select id="sal-year"  style="width:90px"></select>
@@ -128,7 +128,7 @@ async function loadSalary() {
 
       <!-- Earnings & Deductions -->
       <div style="padding:16px 24px;border-bottom:1px solid var(--border)">
-        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--white-dim);font-weight:700;margin-bottom:12px">💸 Earnings &amp; Deductions</div>
+        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--white-dim);font-weight:700;margin-bottom:12px"> Earnings &amp; Deductions</div>
         <div style="display:flex;flex-direction:column;gap:0">
           ${salaryRow('Base / Gross Salary', fmtCurrency(emp.base_salary), '', true)}
           ${emp.absent_deduction   > 0 ? salaryRow('Absent Deduction (' + emp.days_absent + ' days × ₹' + perDay.toLocaleString('en-IN') + ')', fmtCurrency(emp.absent_deduction),   'var(--red)')   : ''}

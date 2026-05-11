@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5001",
+        url: "http://localhost:5002",
       },
     ],
     components: {
@@ -19,15 +19,15 @@ const options = {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT"
-        }
-      }
+          bearerFormat: "JWT",
+        },
+      },
     },
     security: [
       {
-        bearerAuth: []
-      }
-    ]
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["./routes/*.js"], // very important for your structure
 };

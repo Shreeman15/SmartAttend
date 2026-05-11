@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>My Dashboard — HRFlow</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>My Dashboard - HRFlow</title>
   <link rel="stylesheet" href="../css/style.css"/>
 </head>
 <body>
 <div class="app-layout" id="app-layout">
   <div class="main-content">
     <div class="topbar">
-      <button class="hamburger" id="hamburger">☰</button>
-      <div class="topbar-title">🏠 My Dashboard</div>
+      <button class="hamburger" id="hamburger">Menu</button>
+      <div class="topbar-title">My Dashboard</div>
       <div class="topbar-actions">
         <span id="topbar-date" style="font-size:0.82rem;color:var(--white-dim)"></span>
       </div>
     </div>
     <div class="page-body">
 
-      <!-- Welcome banner -->
       <div id="welcome-banner" style="margin-bottom:24px;padding:20px 24px;background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(100,100,255,0.08));border:1px solid var(--border);border-radius:12px">
-        <div style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:700">Good <span id="greeting-time"></span>! 👋</div>
+        <div style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:700">Good <span id="greeting-time"></span></div>
         <div id="welcome-name" style="color:var(--white-dim);margin-top:4px;font-size:0.9rem"></div>
       </div>
 
-      <!-- Punch Card -->
       <div id="punch-section"></div>
 
-      <!-- Quick stats for employee -->
       <div class="stats-grid" id="emp-stats" style="margin-top:24px">
         <div class="stat-card"><div class="loader"></div></div>
         <div class="stat-card"><div class="loader"></div></div>
@@ -34,11 +32,10 @@
         <div class="stat-card"><div class="loader"></div></div>
       </div>
 
-      <!-- Recent attendance -->
       <div class="card" style="margin-top:24px">
         <div class="section-header">
-          <div class="card-title" style="margin-bottom:0"><span class="icon">📋</span> Recent Attendance</div>
-          <a href="attendance.html" class="btn btn-secondary btn-sm">View All →</a>
+          <div class="card-title" style="margin-bottom:0"><span class="icon">Attendance</span> Recent Attendance</div>
+          <a href="attendance.html" class="btn btn-secondary btn-sm">View All</a>
         </div>
         <div class="table-wrapper">
           <table>
@@ -48,11 +45,10 @@
         </div>
       </div>
 
-      <!-- My leave requests -->
       <div class="card" style="margin-top:24px">
         <div class="section-header">
-          <div class="card-title" style="margin-bottom:0"><span class="icon">🌿</span> My Leave Requests</div>
-          <a href="leaves.html" class="btn btn-secondary btn-sm">Apply Leave →</a>
+          <div class="card-title" style="margin-bottom:0"><span class="icon">Leave</span> My Leave Requests</div>
+          <a href="leaves.html" class="btn btn-secondary btn-sm">Apply Leave</a>
         </div>
         <div class="table-wrapper">
           <table>
@@ -62,9 +58,71 @@
         </div>
       </div>
 
+      <div class="card" style="margin-top:24px">
+        <div class="section-header">
+          <div class="card-title" style="margin-bottom:0"><span class="icon">Tickets</span> My Attendance Tickets</div>
+          <button class="btn btn-primary btn-sm" onclick="openTicketModal()">Raise Ticket</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Admin Comment</th>
+                <th>Raised On</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tickets-tbody">
+              <tr class="loading-row"><td colspan="7"><div class="loader"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
+<div id="ticket-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center;padding:20px">
+  <div class="card" style="width:100%;max-width:480px">
+    <div class="section-header">
+      <div class="card-title" style="margin-bottom:0">Raise Attendance Ticket</div>
+      <button class="btn btn-secondary btn-sm" onclick="closeTicketModal()">Close</button>
+    </div>
+    <div id="ticket-alert"></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Issue Type</label>
+        <select id="ticket-type">
+          <option value="">-- Select issue --</option>
+          <option value="Missed Punch In">Missed Punch In</option>
+          <option value="Missed Punch Out">Missed Punch Out</option>
+          <option value="Wrong Attendance">Wrong Attendance</option>
+          <option value="Leave Issue">Leave Issue</option>
+          <option value="Late Punch Correction">Late Punch Correction</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date of Issue</label>
+        <input type="date" id="ticket-date"/>
+      </div>
+      <div class="form-group" style="grid-column:1/-1">
+        <label>Description</label>
+        <textarea id="ticket-description" rows="4" placeholder="Describe the attendance issue clearly..."></textarea>
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="submitTicket()">Submit Ticket</button>
+      <button class="btn btn-secondary" onclick="closeTicketModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-container"></div>
 <script src="../js/api.js"></script>
 <script src="../js/employee-sidebar.js"></script>
@@ -73,90 +131,244 @@ document.addEventListener('DOMContentLoaded', async () => {
   const user = requireEmployee();
   if (!user) return;
 
-  const now  = new Date();
+  const now = new Date();
   const hour = now.getHours();
-  const greet= hour<12?'Morning':hour<17?'Afternoon':'Evening';
-  document.getElementById('greeting-time').textContent = greet;
-  document.getElementById('welcome-name').textContent  = user.name+' · '+user.department+' · '+user.designation;
-  document.getElementById('topbar-date').textContent   = now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
 
-  renderPunchCard(user);
+  document.getElementById('greeting-time').textContent = greeting;
+  document.getElementById('welcome-name').textContent = `${user.name} - ${user.department} - ${user.designation}`;
+  document.getElementById('topbar-date').textContent = now.toLocaleDateString('en-IN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  renderPunchCard();
   loadEmpStats(user);
-  loadRecentAttendance(user);
+  loadRecentAttendance();
   loadMyLeaves(user);
+  loadMyTickets();
 });
 
-async function renderPunchCard(user) {
+async function renderPunchCard() {
   const section = document.getElementById('punch-section');
   try {
     const res = await api.get('/attendance/today-status');
     const rec = res.data;
-    let statusHtml='', btnsHtml='';
+    let statusHtml = '';
+    let btnsHtml = '';
+
     if (!rec) {
-      statusHtml=`<div class="punch-status text-dim">You haven't checked in yet today</div>`;
-      btnsHtml=`<button class="btn btn-primary btn-lg" onclick="punchIn()">🟢 Punch In</button>`;
+      statusHtml = '<div class="punch-status text-dim">You have not checked in yet today</div>';
+      btnsHtml = '<button class="btn btn-primary btn-lg" onclick="punchIn()">Punch In</button>';
     } else if (rec.check_in && !rec.check_out) {
-      statusHtml=`<div class="punch-status text-green">✅ Punched in at <strong>${rec.check_in}</strong></div>`;
-      btnsHtml=`<button class="btn btn-danger btn-lg" onclick="punchOut()">🔴 Punch Out</button>`;
+      statusHtml = `<div class="punch-status text-green">Checked in at <strong>${rec.check_in}</strong></div>`;
+      btnsHtml = '<button class="btn btn-danger btn-lg" onclick="punchOut()">Punch Out</button>';
     } else {
-      statusHtml=`<div class="punch-status">In: <strong class="text-green">${rec.check_in}</strong> &nbsp;|&nbsp; Out: <strong class="text-red">${rec.check_out}</strong> &nbsp;|&nbsp; ${rec.hours_worked}h &nbsp;|&nbsp; ${statusBadge(rec.status)}</div>`;
-      btnsHtml=`<span class="badge badge-present" style="padding:10px 24px;font-size:0.9rem">✓ Day complete 🎉</span>`;
+      statusHtml = `<div class="punch-status">In: <strong class="text-green">${rec.check_in}</strong> | Out: <strong class="text-red">${rec.check_out}</strong> | ${rec.hours_worked}h | ${statusBadge(rec.status)}</div>`;
+      btnsHtml = '<span class="badge badge-present" style="padding:10px 24px;font-size:0.9rem">Day complete</span>';
     }
-    section.innerHTML=`<div class="punch-card">
+
+    section.innerHTML = `<div class="punch-card">
       <div class="punch-time" id="live-clock">--:--:--</div>
-      <div class="punch-date">${new Date().toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</div>
-      ${statusHtml}<div class="punch-btns">${btnsHtml}</div>
+      <div class="punch-date">${new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</div>
+      ${statusHtml}
+      <div class="punch-btns">${btnsHtml}</div>
     </div>`;
-    const tick=()=>{const el=document.getElementById('live-clock');if(el)el.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});};
-    tick(); setInterval(tick,1000);
-  } catch(err) { section.innerHTML=`<div class="alert alert-error">⚠ ${err.message}</div>`; }
+
+    const tick = () => {
+      const el = document.getElementById('live-clock');
+      if (el) {
+        el.textContent = new Date().toLocaleTimeString('en-IN', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        });
+      }
+    };
+
+    tick();
+    setInterval(tick, 1000);
+  } catch (err) {
+    section.innerHTML = `<div class="alert alert-error">Warning: ${err.message}</div>`;
+  }
 }
 
-async function punchIn()  { try{const r=await api.post('/attendance/punch-in',{});showToast(r.message,'success');renderPunchCard(getUser());loadEmpStats(getUser());}catch(err){showToast(err.message,'error');} }
-async function punchOut() { try{const r=await api.post('/attendance/punch-out',{});showToast(r.message,'success');renderPunchCard(getUser());loadEmpStats(getUser());}catch(err){showToast(err.message,'error');} }
+async function punchIn() {
+  try {
+    const r = await api.post('/attendance/punch-in', {});
+    showToast(r.message, 'success');
+    renderPunchCard();
+    loadEmpStats(getUser());
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function punchOut() {
+  try {
+    const r = await api.post('/attendance/punch-out', {});
+    showToast(r.message, 'success');
+    renderPunchCard();
+    loadEmpStats(getUser());
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
 
 async function loadEmpStats(user) {
   try {
-    const now=new Date(), m=now.getMonth()+1, y=now.getFullYear();
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
     const [attRes, balRes] = await Promise.all([
-      api.get(`/attendance/my-history?month=${m}&year=${y}`),
-      api.get('/leaves/balance/'+user._id)
+      api.get(`/attendance/my-history?month=${month}&year=${year}`),
+      api.get('/leaves/balance/' + user._id),
     ]);
-    const s=attRes.summary, b=balRes.data;
-    const totalLeaveLeft = (b.Sick.remaining||0)+(b.Casual.remaining||0)+(b.Earned.remaining||0);
-    document.getElementById('emp-stats').innerHTML=`
-      <div class="stat-card green"><div class="stat-label">Present (This Month)</div><div class="stat-value text-green">${s.present}</div><div class="stat-sub">Days attended</div></div>
-      <div class="stat-card red"><div class="stat-label">Absent (This Month)</div><div class="stat-value text-red">${s.absent}</div><div class="stat-sub">Days missed</div></div>
-      <div class="stat-card amber"><div class="stat-label">Half Days</div><div class="stat-value text-amber">${s.half_day}</div><div class="stat-sub">This month</div></div>
+
+    const summary = attRes.summary;
+    const balance = balRes.data;
+    const totalLeaveLeft =
+      (balance.Sick.remaining || 0) +
+      (balance.Casual.remaining || 0) +
+      (balance.Earned.remaining || 0);
+
+    document.getElementById('emp-stats').innerHTML = `
+      <div class="stat-card green"><div class="stat-label">Present (This Month)</div><div class="stat-value text-green">${summary.present}</div><div class="stat-sub">Days attended</div></div>
+      <div class="stat-card red"><div class="stat-label">Absent (This Month)</div><div class="stat-value text-red">${summary.absent}</div><div class="stat-sub">Days missed</div></div>
+      <div class="stat-card amber"><div class="stat-label">Half Days</div><div class="stat-value text-amber">${summary.half_day}</div><div class="stat-sub">This month</div></div>
       <div class="stat-card purple"><div class="stat-label">Leave Balance</div><div class="stat-value" style="color:var(--purple)">${totalLeaveLeft}</div><div class="stat-sub">Days remaining</div></div>`;
-  } catch(err) { document.getElementById('emp-stats').innerHTML=`<div class="alert alert-error" style="grid-column:1/-1">⚠ ${err.message}</div>`; }
+  } catch (err) {
+    document.getElementById('emp-stats').innerHTML = `<div class="alert alert-error" style="grid-column:1/-1">Warning: ${err.message}</div>`;
+  }
 }
 
-async function loadRecentAttendance(user) {
-  const tbody=document.getElementById('recent-att');
+async function loadRecentAttendance() {
+  const tbody = document.getElementById('recent-att');
   try {
-    const now=new Date(), m=now.getMonth()+1, y=now.getFullYear();
-    const res=await api.get(`/attendance/my-history?month=${m}&year=${y}`);
-    if (!res.data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--white-dim)">No records this month</td></tr>';return;}
-    tbody.innerHTML=res.data.slice(0,7).map(r=>`<tr>
-      <td>${fmtDate(r.date)}</td><td>${r.check_in||'—'}</td><td>${r.check_out||'—'}</td>
-      <td>${r.hours_worked?r.hours_worked+'h':'—'}</td><td>${statusBadge(r.status)}</td>
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+    const res = await api.get(`/attendance/my-history?month=${month}&year=${year}`);
+
+    if (!res.data.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--white-dim)">No records this month</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = res.data.slice(0, 7).map((r) => `<tr>
+      <td>${fmtDate(r.date)}</td>
+      <td>${r.check_in || '—'}</td>
+      <td>${r.check_out || '—'}</td>
+      <td>${r.hours_worked ? `${r.hours_worked}h` : '—'}</td>
+      <td>${statusBadge(r.status)}</td>
     </tr>`).join('');
-  } catch(err){tbody.innerHTML=`<tr><td colspan="5"><div class="alert alert-error">⚠ ${err.message}</div></td></tr>`;}
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="alert alert-error">Warning: ${err.message}</div></td></tr>`;
+  }
 }
 
 async function loadMyLeaves(user) {
-  const tbody=document.getElementById('recent-leaves');
+  const tbody = document.getElementById('recent-leaves');
   try {
-    const res=await api.get('/leaves?employee_id='+user._id);
-    if (!res.data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--white-dim)">No leave requests yet</td></tr>';return;}
-    tbody.innerHTML=res.data.slice(0,5).map(l=>`<tr>
-      <td><span class="badge badge-pending">${l.leave_type}</span></td>
-      <td>${fmtDate(l.start_date)}</td><td>${fmtDate(l.end_date)}</td>
-      <td>${l.total_days}d</td><td>${statusBadge(l.status)}</td>
-      <td style="font-size:0.78rem;color:var(--white-dim)">${l.approver_note||'—'}</td>
+    const res = await api.get('/leaves?employee_id=' + user._id);
+    if (!res.data.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--white-dim)">No leave requests yet</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = res.data.slice(0, 5).map((leave) => `<tr>
+      <td><span class="badge badge-pending">${leave.leave_type}</span></td>
+      <td>${fmtDate(leave.start_date)}</td>
+      <td>${fmtDate(leave.end_date)}</td>
+      <td>${leave.total_days}d</td>
+      <td>${statusBadge(leave.status)}</td>
+      <td style="font-size:0.78rem;color:var(--white-dim)">${leave.approver_note || '—'}</td>
     </tr>`).join('');
-  } catch(err){tbody.innerHTML=`<tr><td colspan="6"><div class="alert alert-error">⚠ ${err.message}</div></td></tr>`;}
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="alert alert-error">Warning: ${err.message}</div></td></tr>`;
+  }
+}
+
+function openTicketModal() {
+  document.getElementById('ticket-modal').style.display = 'flex';
+}
+
+function closeTicketModal() {
+  document.getElementById('ticket-modal').style.display = 'none';
+  document.getElementById('ticket-alert').innerHTML = '';
+  document.getElementById('ticket-type').value = '';
+  document.getElementById('ticket-date').value = '';
+  document.getElementById('ticket-description').value = '';
+}
+
+async function submitTicket() {
+  const type = document.getElementById('ticket-type').value;
+  const date = document.getElementById('ticket-date').value;
+  const description = document.getElementById('ticket-description').value.trim();
+  const alertBox = document.getElementById('ticket-alert');
+
+  if (!type || !date || !description) {
+    alertBox.innerHTML = '<div class="alert alert-error">Please fill all fields</div>';
+    return;
+  }
+
+  try {
+    await api.post('/tickets', { type, date, description });
+    showToast('Ticket raised successfully', 'success');
+    closeTicketModal();
+    loadMyTickets();
+  } catch (err) {
+    alertBox.innerHTML = `<div class="alert alert-error">Warning: ${err.message}</div>`;
+  }
+}
+
+async function loadMyTickets() {
+  const tbody = document.getElementById('tickets-tbody');
+  try {
+    const res = await api.get('/tickets/my');
+    const tickets = res.data || res;
+
+    if (!tickets.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--white-dim)">No tickets raised yet</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = tickets.map((ticket) => {
+      const safeDescription = escapeHtml(ticket.description);
+      const safeComment = escapeHtml(ticket.adminComment || '—');
+      const actionHtml = ticket.status === 'Resolved'
+        ? `<span style="font-size:0.75rem;color:var(--green)">Resolved ${fmtDate(ticket.resolvedAt)}</span>`
+        : `<button class="btn btn-danger btn-sm" onclick="deleteTicket('${ticket._id}')">Withdraw</button>`;
+
+      return `<tr>
+        <td><span class="badge badge-pending">${escapeHtml(ticket.type)}</span></td>
+        <td>${fmtDate(ticket.date)}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${safeDescription}">${safeDescription}</td>
+        <td>${statusBadge(ticket.status)}</td>
+        <td style="font-size:0.78rem;color:var(--white-dim)">${safeComment}</td>
+        <td style="font-size:0.78rem">${fmtDate(ticket.createdAt)}</td>
+        <td>${actionHtml}</td>
+      </tr>`;
+    }).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="alert alert-error">Warning: ${err.message}</div></td></tr>`;
+  }
+}
+
+async function deleteTicket(id) {
+  if (!confirm('Withdraw this ticket? It will be hidden from active lists, but kept safely in records.')) {
+    return;
+  }
+
+  try {
+    await api.delete(`/tickets/${id}`);
+    showToast('Ticket withdrawn successfully', 'success');
+    loadMyTickets();
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
 }
 </script>
 </body>
